@@ -1,0 +1,13 @@
+package example
+
+version = 0.0.1
+
+depends = base >= 0.5.1
+
+modules = Example
+
+main = Main
+
+executable = voting
+
+sourcedir = "src"

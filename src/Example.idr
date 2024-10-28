@@ -44,8 +44,10 @@ countBallots options ballots = result
  where
   optionVote : (option : Option) -> (option ** AssignedVote Option option)
   optionVote option = (option ** countOption option (toList ballots))
+
   votes : List1 (option ** AssignedVote Option option)
   votes = map optionVote options
+
   eliminateOption :
     (option ** AssignedVote Option option) ->
     List (option ** AssignedVote Option option) ->
@@ -64,16 +66,21 @@ countBallots options ballots = result
            else
              let (finalMinimum, survivors) = eliminateOption currentMinimum otherCandidates
              in (finalMinimum, newCandidate :: survivors)
+
   eliminateOptionResult : ((option ** AssignedVote Option option), List (option ** AssignedVote Option option))
   eliminateOptionResult =
     case votes of
       v ::: vs => eliminateOption v vs
+
   eliminatedOption : Option
   eliminatedOption =
     case eliminateOptionResult of
       ((option ** _), _) => option
+
   survivingOptions : List Option
   survivingOptions = map fst (snd eliminateOptionResult)
+
+  result : List1 Option
   result =
     case Data.List1.fromList survivingOptions of
       Nothing => eliminatedOption ::: []
